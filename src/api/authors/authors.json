@@ -1,0 +1,62 @@
+[
+  {
+    "name": "Steve",
+    "surname": "Doe",
+    "email": "jane1@test.com",
+    "DoB": "01/01/1980",
+    "avatar": "https://ui-avatars.com/api/?name=John+Doe",
+    "createdAt": "2023-03-06T13:08:02.935Z",
+    "updatedAt": "2023-03-06T13:08:02.935Z",
+    "id": "ek26t1kuilewu83qx"
+  },
+  {
+    "name": "Steve",
+    "surname": "Doe",
+    "email": "jane2@test.com",
+    "DoB": "01/01/1980",
+    "avatar": "https://ui-avatars.com/api/?name=John+Doe",
+    "createdAt": "2023-03-06T13:08:09.725Z",
+    "updatedAt": "2023-03-06T13:08:09.725Z",
+    "id": "ek26t1kuilewu88zh"
+  },
+  {
+    "name": "Steve",
+    "surname": "Doe",
+    "email": "jane3@test.com",
+    "DoB": "01/01/1980",
+    "avatar": "https://ui-avatars.com/api/?name=John+Doe",
+    "createdAt": "2023-03-06T13:08:12.947Z",
+    "updatedAt": "2023-03-06T13:08:12.947Z",
+    "id": "ek26t1kuilewu8bgz"
+  },
+  {
+    "name": 10,
+    "surname": "Doe",
+    "email": "jan3@test.com",
+    "DoB": "01/01/1980",
+    "avatar": "https://ui-avatars.com/api/?name=John+Doe",
+    "createdAt": "2023-03-06T13:56:57.050Z",
+    "updatedAt": "2023-03-06T13:56:57.050Z",
+    "id": "ek26t1nlflewvyzq2"
+  },
+  {
+    "name": 12345,
+    "surname": "Doe",
+    "email": "jan33@test.com",
+    "DoB": "01/01/1980",
+    "avatar": "https://ui-avatars.com/api/?name=John+Doe",
+    "createdAt": "2023-03-06T13:57:58.353Z",
+    "updatedAt": "2023-03-06T13:57:58.353Z",
+    "id": "ek26t1nlfleww0b0x"
+  },
+  {
+    "name": true,
+    "surname": "Doe",
+    "email": "jan333@test.com",
+    "DoB": "01/01/1980",
+    "avatar": "https://ui-avatars.com/api/?name=John+Doe",
+    "createdAt": "2023-03-06T13:58:27.394Z",
+    "updatedAt": "2023-03-06T13:58:27.394Z",
+    "id": "ek26t1nlfleww0xfm"
+  }
+]

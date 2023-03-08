@@ -1,35 +1,35 @@
 import { checkSchema, validationResult } from "express-validator";
-import createHttpError, { HttpError } from "http-errors";
+import createHttpError from "http-errors";
 
 const authorsSchema = {
   name: {
     in: ["body"],
     isString: {
-      errorMessage: "Needs to be a string",
+      errorMessage: "name needs to be a string",
     },
   },
   surname: {
     in: ["body"],
     isString: {
-      errorMessage: "Needs to be a string",
+      errorMessage: "surname needs to be a string",
     },
   },
   email: {
     in: ["body"],
     isString: {
-      errorMessage: "Needs to be a string",
+      errorMessage: "email needs to be a string",
     },
   },
   DoB: {
     in: ["body"],
-    isDate: {
-      errorMessage: "Needs to be a date",
+    isString: {
+      errorMessage: "dob needs to be a string",
     },
   },
   avatar: {
     in: ["body"],
     isURL: {
-      errorMessage: "Needs to be a valid image url",
+      errorMessage: "avater needs to be a valid image url",
     },
   },
 };
@@ -38,37 +38,37 @@ const blogPostsSchema = {
   category: {
     in: ["body"],
     isString: {
-      errorMessage: "Needs to be a string",
+      errorMessage: "category needs to be a string",
     },
   },
   title: {
     in: ["body"],
     isString: {
-      errorMessage: "Needs to be a string",
+      errorMessage: "title needs to be a string",
     },
   },
   cover: {
     in: ["body"],
     isURL: {
-      errorMessage: "Needs to be a valid image url",
+      errorMessage: "cover needs to be a valid image url",
     },
   },
   "readTime.value": {
     in: ["body"],
     isInt: {
-      errorMessage: "Needs to be an integer",
+      errorMessage: "readtime value needs to be an integer",
     },
   },
   "readTime.unit": {
     in: ["body"],
     isString: {
-      errorMessage: "Needs to be a string",
+      errorMessage: "readtime unit needs to be a string",
     },
   },
   content: {
     in: ["body"],
     isString: {
-      errorMessage: "Needs to be a string",
+      errorMessage: "content needs to be a string",
     },
   },
 };
@@ -85,7 +85,7 @@ export const triggerBadRequest = (req, res, next) => {
     next();
   } else {
     next(
-      createHttpError(400, "Error during author validation", {
+      createHttpError(400, "Error during validation", {
         errorsList: errors.array(),
       })
     );

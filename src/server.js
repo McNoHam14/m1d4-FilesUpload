@@ -8,9 +8,12 @@ import {
   notfoundHandler,
   genericErrorHandler,
 } from "./errorHandlers.js";
+import cors from "cors";
 
 const server = Express();
 const port = 3002;
+
+server.use(cors());
 
 server.use(Express.json());
 

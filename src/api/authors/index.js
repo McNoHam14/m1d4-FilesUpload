@@ -2,27 +2,20 @@
 
 import Express from "express";
 import fs, { writeFile } from "fs";
-import { dirname, join } from "path";
+import { dirname, join, extname } from "path";
 import { fileURLToPath } from "url";
 import uniqid from "uniqid";
 import createHttpError from "http-errors";
 import { checkAuthorsSchema, triggerBadRequest } from "../validation.js";
+import {
+  getAuthors,
+  saveAuthorImage,
+  writeAuthors,
+} from "../../lib/fs-tools.js";
 
 const authorsRouter = Express.Router();
 
-const authorsJSONPath = join(
-  dirname(fileURLToPath(import.meta.url)),
-  "authors.json"
-);
-console.log(
-  "TARGET:",
-  join(dirname(fileURLToPath(import.meta.url)), "authors.json")
-);
-
-const getAuthors = () => JSON.parse(fs.readFileSync(authorsJSONPath));
-
-const writeAuthors = (authorsArray) =>
-  fs.writeFileSync(authorsJSONPath, JSON.stringify(authorsArray));
+console.log(getAuthors());
 
 // POST (new author)
 
@@ -30,7 +23,7 @@ authorsRouter.post(
   "/",
   checkAuthorsSchema,
   triggerBadRequest,
-  (req, res, next) => {
+  async (req, res, next) => {
     try {
       const newAuthor = {
         ...req.body,
@@ -39,7 +32,7 @@ authorsRouter.post(
         id: uniqid(),
       };
 
-      const authorsArray = getAuthors();
+      const authorsArray = await getAuthors();
 
       const emailInUse = authorsArray.some(
         (author) => author.email === req.body.email
@@ -47,7 +40,8 @@ authorsRouter.post(
 
       if (!emailInUse) {
         authorsArray.push(newAuthor);
-        writeAuthors(authorsArray);
+        await writeAuthors(authorsArray);
+
         res.status(201).send({
           name: newAuthor.name + " " + newAuthor.surname,
           id: newAuthor.id,
@@ -68,9 +62,9 @@ authorsRouter.post(
 
 // GET (all authors)
 
-authorsRouter.get("/", (req, res, next) => {
+authorsRouter.get("/", async (req, res, next) => {
   try {
-    const authorsArray = getAuthors();
+    const authorsArray = await getAuthors();
     res.send(authorsArray);
   } catch (error) {
     next(error);
@@ -79,9 +73,9 @@ authorsRouter.get("/", (req, res, next) => {
 
 // GET (single author)
 
-authorsRouter.get("/:authorId", (req, res, next) => {
+authorsRouter.get("/:authorId", async (req, res, next) => {
   try {
-    const authorsArray = getAuthors();
+    const authorsArray = await getAuthors();
     const foundAuthor = authorsArray.find(
       (author) => author.id === req.params.authorId
     );
@@ -103,9 +97,9 @@ authorsRouter.put(
   "/:authorId",
   checkAuthorsSchema,
   triggerBadRequest,
-  (req, res, next) => {
+  async (req, res, next) => {
     try {
-      const authorsArray = getAuthors();
+      const authorsArray = await getAuthors();
       const index = authorsArray.findIndex(
         (author) => author.id === req.params.authorId
       );
@@ -117,7 +111,7 @@ authorsRouter.put(
           updatedAt: new Date(),
         };
         authorsArray[index] = updatedAuthor;
-        writeAuthors(authorsArray);
+        await writeAuthors(authorsArray);
         res.send(updatedAuthor);
       } else {
         next(
@@ -135,9 +129,9 @@ authorsRouter.put(
 
 // DELETE
 
-authorsRouter.delete("/:authorId", (req, res, next) => {
+authorsRouter.delete("/:authorId", async (req, res, next) => {
   try {
-    const authorsArray = getAuthors();
+    const authorsArray = await getAuthors();
     const remainingAuthors = authorsArray.filter(
       (author) => author.id !== req.params.authorId
     );
@@ -157,18 +151,27 @@ authorsRouter.delete("/:authorId", (req, res, next) => {
 
 // POST (checkEmail)
 
-authorsRouter.post("/checkEmail", (req, res) => {
-  const authorsArray = getAuthors();
+// authorsRouter.post("/checkEmail", async (req, res, next) => {
+//   try {
+//     const authorsArray = getAuthors();
 
-  const emailInUse = authorsArray.some(
-    (author) => author.email === req.body.email
-  );
+//     if (req.body && req.body.email) {
+//       const emailInUse = authorsArray.some(
+//         (author) => author.email === req.body.email
+//       );
+//       res.send({ emailInUse: emailInUse });
+//     } else {
+//       next(createHttpError(400, "TEST"));
+//     }
+//   } catch (error) {
+//     next(error);
+//   }
+//   const authorsArray = JSON.parse(fs.readFileSync(authorsPath));
+//   const emailInUse = authors.some((author) => author.email === req.body.email);
 
-  console.log("A", emailInUse);
-
-  res.send(
-    `This email: ${req.body.email} is already is use (bool:${emailInUse})`
-  );
-});
+//   res.send(
+//     `This email: ${req.body.email} is already is use (bool:${emailInUse})`
+//   );
+// });
 
 export default authorsRouter;

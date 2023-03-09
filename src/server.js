@@ -2,6 +2,7 @@ import Express from "express";
 import listEndpoints from "express-list-endpoints";
 import authorsRouter from "./api/authors/index.js";
 import blogPostsRouter from "./api/blogPosts/index.js";
+import filesRouter from "./api/files/index.js";
 import {
   badRequestHandler,
   unauthorizedHandler,
@@ -9,6 +10,9 @@ import {
   genericErrorHandler,
 } from "./errorHandlers.js";
 import cors from "cors";
+import { dirname, join, extname } from "path";
+import { fileURLToPath } from "url";
+import { publicFolderPath } from "./lib/fs-tools.js";
 
 const server = Express();
 const port = 3002;
@@ -16,11 +20,13 @@ const port = 3002;
 server.use(cors());
 
 server.use(Express.json());
+server.use(Express.static(publicFolderPath));
 
 // Endpoints
 
 server.use("/authors", authorsRouter);
 server.use("/blogPosts", blogPostsRouter);
+server.use("/", filesRouter);
 
 // Error handlers
 

@@ -1,1 +1,31 @@
-[{"category":"ARTICLE CATEGORY","title":"ARTICLE TITLE","cover":"ARTICLE COVER (IMAGE LINK)","readTime":{"value":2,"unit":"minute"},"author":{"name":"AUTHOR AVATAR NAME","avatar":"AUTHOR AVATAR LINK"},"content":"HTML","createdAt":"2023-03-05T14:19:31.790Z","id":"ek26t109blevhc6ds"},{"category":"ARTICLE CATEGORY","title":"ARTICLE TITLE","cover":"ARTICLE COVER (IMAGE LINK)","readTime":{"value":2,"unit":"minute"},"author":{"name":"AUTHOR AVATAR NAME","avatar":"AUTHOR AVATAR LINK"},"content":"HTML","createdAt":"2023-03-05T14:19:51.077Z","id":"ek26t109blevhcl9h"},{"category":"put test1","title":"put test1","cover":"ARTICLE COVER (IMAGE LINK)","readTime":{"value":2,"unit":"minute"},"author":{"name":"AUTHOR AVATAR NAME","avatar":"AUTHOR AVATAR LINK"},"content":"HTML","createdAt":"2023-03-05T18:35:27.127Z","id":"ek26t13yolevqhamw","updatedAt":"2023-03-05T18:35:54.838Z"},{"category":"ARTICLE CATEGORY","title":"ARTICLE TITLE","cover":"ARTICLE COVER (IMAGE LINK)","readTime":{"value":2,"unit":"minute"},"author":{"name":"AUTHOR AVATAR NAME","avatar":"AUTHOR AVATAR LINK"},"content":"HTML","createdAt":"2023-03-06T13:28:20.396Z","id":"ek26t1m0mlewuy759"},{"category":"new blog post","title":"ARTICLE TITLE","cover":"https://picsum.photos/200/300","readTime":{"value":2,"unit":"minute"},"author":{"name":"AUTHOR AVATAR NAME","avatar":"AUTHOR AVATAR LINK"},"content":"HTML","createdAt":"2023-03-06T14:41:50.105Z","id":"ek26t1saelewxkpp6"},{"category":"new blog post","title":"ARTICLE TITLE","cover":"https://picsum.photos/200/300","readTime":{"value":2,"unit":"minute"},"author":{"name":"AUTHOR AVATAR NAME","avatar":"AUTHOR AVATAR LINK"},"content":"HTML","createdAt":"2023-03-06T14:41:55.564Z","id":"ek26t1saelewxktws"},{"category":"new blog post","title":"ARTICLE TITLE","cover":"https://picsum.photos/200/300","readTime":{"value":2,"unit":"minute"},"author":{"name":"AUTHOR AVATAR NAME","avatar":"AUTHOR AVATAR LINK"},"content":"HTML","createdAt":"2023-03-06T14:42:03.611Z","id":"ek26t1saelewxl04b"},{"category":"new blog post","title":"ARTICLE TITLE","cover":"https://picsum.photos/200/300","readTime":{"value":2,"unit":"minute"},"author":{"name":"AUTHOR AVATAR NAME","avatar":"AUTHOR AVATAR LINK"},"content":"HTML","createdAt":"2023-03-06T14:51:01.434Z","id":"ek26t1saelewxwj3u"},{"title":"Ben test article","category":"Category1","content":"<p></p>","cover":"https://picsum.photos/200/300","readTime":{"value":"5","unit":"mins"},"author":{"name":"Ben McMahon","avatar":"https://picsum.photos/200/300"},"createdAt":"2023-03-07T15:48:11.450Z","id":"ek26ta4vleyfdwe3"},{"title":"Ben test article","category":"Category1","content":"<p></p>","cover":"https://picsum.photos/200/300","readTime":{"value":"5","unit":"mins"},"author":{"name":"Ben McMahon","avatar":"https://picsum.photos/200/300"},"createdAt":"2023-03-07T15:48:12.560Z","id":"ek26ta4vleyfdx8w"}]
+[
+  {
+    "title": "Ben test article",
+    "category": "Category1",
+    "content": "<p></p>",
+    "cover": "https://picsum.photos/200/300",
+    "readTime": { "value": "5", "unit": "mins" },
+    "author": {
+      "name": "Ben McMahon",
+      "avatar": "https://picsum.photos/200/300"
+    },
+    "createdAt": "2023-03-07T15:48:11.450Z",
+    "id": "ek26ta4vleyfdwe3",
+    "comments": []
+  },
+  {
+    "title": "Ben test article",
+    "category": "Category1",
+    "content": "<p></p>",
+    "cover": "http://localhost:3002/ek26ta4vleyfdx8w.webp",
+    "readTime": { "value": "5", "unit": "mins" },
+    "author": {
+      "name": "Ben McMahon",
+      "avatar": "https://picsum.photos/200/300"
+    },
+    "createdAt": "2023-03-07T15:48:12.560Z",
+    "id": "ek26ta4vleyfdx8w",
+    "updatedAt": "2023-03-09T14:43:51.878Z",
+    "comments": []
+  }
+]

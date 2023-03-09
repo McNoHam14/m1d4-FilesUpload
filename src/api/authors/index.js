@@ -9,9 +9,23 @@ import createHttpError from "http-errors";
 import { checkAuthorsSchema, triggerBadRequest } from "../validation.js";
 import {
   getAuthors,
+  publicFolderPath,
   saveAuthorImage,
   writeAuthors,
 } from "../../lib/fs-tools.js";
+import multer from "multer";
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, publicFolderPath);
+  },
+  filename: function (req, file, cb) {
+    const filename = req.params.authorId + extname(file.originalname);
+    cb(null, filename);
+  },
+});
+
+const upload = multer({ storage: storage });
 
 const authorsRouter = Express.Router();
 
@@ -151,27 +165,54 @@ authorsRouter.delete("/:authorId", async (req, res, next) => {
 
 // POST (checkEmail)
 
-// authorsRouter.post("/checkEmail", async (req, res, next) => {
-//   try {
-//     const authorsArray = getAuthors();
+authorsRouter.post("/checkEmail", async (req, res, next) => {
+  try {
+    const authorsArray = await getAuthors();
 
-//     if (req.body && req.body.email) {
-//       const emailInUse = authorsArray.some(
-//         (author) => author.email === req.body.email
-//       );
-//       res.send({ emailInUse: emailInUse });
-//     } else {
-//       next(createHttpError(400, "TEST"));
-//     }
-//   } catch (error) {
-//     next(error);
-//   }
-//   const authorsArray = JSON.parse(fs.readFileSync(authorsPath));
-//   const emailInUse = authors.some((author) => author.email === req.body.email);
+    if (req.body && req.body.email) {
+      const emailInUse = authorsArray.some(
+        (author) => author.email === req.body.email
+      );
+      res.send({ emailInUse: emailInUse });
+    } else {
+      next(createHttpError(400, "TEST"));
+    }
+  } catch (error) {
+    next(error);
+  }
+  // const authorsArray = JSON.parse(fs.readFileSync(authorsPath));
+  const emailInUse = authors.some((author) => author.email === req.body.email);
 
-//   res.send(
-//     `This email: ${req.body.email} is already is use (bool:${emailInUse})`
-//   );
-// });
+  res.send(
+    `This email: ${req.body.email} is already is use (bool:${emailInUse})`
+  );
+});
+
+authorsRouter.post(
+  "/:authorId/uploadAvatar",
+  upload.single("avatar"),
+  async (req, res, next) => {
+    try {
+      const authors = await getAuthors();
+      const index = authors.findIndex(
+        (author) => author.id === req.params.authorId
+      );
+      if (index !== -1) {
+        const filename = req.params.authorId + extname(req.file.originalname);
+        // await saveAuthorImage(filename, req.file.buffer);
+        authors[index] = {
+          ...authors[index],
+          avatar: `http://localhost:3002/${filename}`,
+        };
+        await writeAuthors(authors);
+        res.send({ message: `${req.params.authorId} avatar uploaded` });
+      } else {
+        next(createHttpError(404, `no author with id ${req.params.authorId} `));
+      }
+    } catch (error) {
+      next(error);
+    }
+  }
+);
 
 export default authorsRouter;

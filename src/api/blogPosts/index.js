@@ -2,12 +2,29 @@
 
 import Express from "express";
 import fs from "fs";
-import { dirname, join } from "path";
+import { dirname, extname, join } from "path";
 import { fileURLToPath } from "url";
 import uniqid from "uniqid";
 import createHttpError from "http-errors";
 import { checkBlogPostsSchema, triggerBadRequest } from "../validation.js";
-import { getBlogPosts, writeBlogPosts } from "../../lib/fs-tools.js";
+import {
+  getBlogPosts,
+  publicFolderPath,
+  writeBlogPosts,
+} from "../../lib/fs-tools.js";
+import multer from "multer";
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, publicFolderPath);
+  },
+  filename: function (req, file, cb) {
+    const filename = req.params.blogPostId + extname(file.originalname);
+    cb(null, filename);
+  },
+});
+
+const upload = multer({ storage: storage });
 
 const blogPostsRouter = Express.Router();
 
@@ -25,6 +42,7 @@ blogPostsRouter.post(
       id: uniqid(),
       createdAt: new Date(),
       updatedAt: new Date(),
+      comments: [],
     };
     const blogPostsArray = await getBlogPosts();
     blogPostsArray.push(newBlogPost);
@@ -130,5 +148,129 @@ blogPostsRouter.delete("/:blogPostId", async (req, res, next) => {
     next(error);
   }
 });
+
+blogPostsRouter.post(
+  "/:blogPostId/uploadCover",
+  upload.single("coverImage"),
+  // needs to be the same as key in Postman, upload comes from multer disk storage
+  async (req, res, next) => {
+    try {
+      const blogPostsArray = await getBlogPosts();
+
+      const index = blogPostsArray.findIndex(
+        (blogPost) => blogPost.id === req.params.blogPostId
+      );
+      const filename = req.params.blogPostId + extname(req.file.originalname);
+      if (index !== -1) {
+        const oldBlogPost = blogPostsArray[index];
+        const updatedBlogPost = {
+          ...oldBlogPost,
+          cover: `http://localhost:3002/${filename}`,
+          updatedAt: new Date(),
+        };
+        blogPostsArray[index] = updatedBlogPost;
+        await writeBlogPosts(blogPostsArray);
+        res.send(updatedBlogPost);
+      } else {
+        next(
+          createHttpError(
+            404,
+            `There is no blogpost with ${req.params.blogPostId} as an ID`
+          )
+        );
+      }
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+blogPostsRouter.post("/:blogPostId/comments", async (req, res, next) => {
+  try {
+    const blogPostsArray = await getBlogPosts();
+
+    const index = blogPostsArray.findIndex(
+      (blogPost) => blogPost.id === req.params.blogPostId
+    );
+
+    if (index !== -1) {
+      const currentBlogPost = blogPostsArray[index];
+      req.body.id = uniqid();
+      currentBlogPost.comments.push(req.body);
+      blogPostsArray[index] = currentBlogPost;
+      await writeBlogPosts(blogPostsArray);
+      res.send(currentBlogPost);
+    } else {
+      next(
+        createHttpError(
+          404,
+          `There is no blogpost with ${req.params.blogPostId} as an ID`
+        )
+      );
+    }
+  } catch (error) {
+    next(error);
+  }
+});
+
+blogPostsRouter.get("/:blogPostId/comments", async (req, res, next) => {
+  try {
+    const blogPostsArray = await getBlogPosts();
+
+    const index = blogPostsArray.findIndex(
+      (blogPost) => blogPost.id === req.params.blogPostId
+    );
+
+    if (index !== -1) {
+      const currentBlogPost = blogPostsArray[index];
+      res.send(currentBlogPost.comments);
+    } else {
+      next(
+        createHttpError(
+          404,
+          `There is no blogpost with ${req.params.blogPostId} as an ID`
+        )
+      );
+    }
+  } catch (error) {
+    next(error);
+  }
+});
+
+blogPostsRouter.delete(
+  "/:blogPostId/comments/:commentId",
+  async (req, res, next) => {
+    try {
+      const blogPostsArray = await getBlogPosts();
+
+      const index = blogPostsArray.findIndex(
+        (blogPost) => blogPost.id === req.params.blogPostId
+      );
+
+      if (index !== -1) {
+        const currentBlogPost = blogPostsArray[index];
+        currentBlogPost.comments = currentBlogPost.comments.filter(
+          (comment) => {
+            if (comment.id !== req.params.commentId) {
+              return true;
+            }
+          }
+        );
+        blogPostsArray[index] = currentBlogPost;
+        await writeBlogPosts(blogPostsArray);
+        res.send(currentBlogPost);
+      } else {
+        next(
+          createHttpError(
+            404,
+            `There is no blogpost with ${req.params.blogPostId} as an ID`
+          )
+        );
+      }
+    } catch (error) {
+      next(error);
+    }
+  }
+);
 
 export default blogPostsRouter;
